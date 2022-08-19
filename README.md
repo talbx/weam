@@ -40,3 +40,5 @@ spec:
           value: some-special-namespace
         receiver: webex
 ```
+
+the middleware exposes the HTTP-POST endpoint on `:2000/notify`
