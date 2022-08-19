@@ -1,6 +1,7 @@
 package util
 
 import (
+	"fmt"
 	"io/ioutil"
 
 	"gopkg.in/yaml.v2"
@@ -25,4 +26,12 @@ func ReadConfig(config *AppConfig) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func MapToString(m map[string]string) string {
+	var tplString = ""
+	for key, value := range m {
+		tplString += fmt.Sprintf(`- %s: %s \n`, key, value)
+	}
+	return tplString
 }

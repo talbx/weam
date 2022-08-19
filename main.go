@@ -10,39 +10,38 @@ import (
 	"github.com/talbx/weam/internal/pkg/util"
 )
 
-func main() {
+var AppConf util.AppConfig
 
-	var AppConf util.AppConfig
-	util.ReadConfig(&AppConf)
+func handlePOST(c *gin.Context) {
+	jsonData, err := ioutil.ReadAll(c.Request.Body)
+	if err != nil {
+		panic(err)
+	}
+	var payload util.Payload
+	c.Bind(&payload)
+	json.Unmarshal(jsonData, &payload)
+	var notifier service.Notifier = service.WebexNotifier{}
 
-	r := gin.Default()
-	r.POST("/notify", func(c *gin.Context) {
-		jsonData, err := ioutil.ReadAll(c.Request.Body)
-		if err != nil {
-			panic(err)
+	mapper := service.PayloadMapper{}
+	mds := mapper.Apply(payload)
+
+	forEach(mds, func(md util.Markdown) {
+		webex := util.Webex{
+			RoomId:   AppConf.Receiver,
+			Markdown: md,
 		}
-		var payload util.Payload
-		c.Bind(&payload)
-		json.Unmarshal(jsonData, &payload)
-		var notifier = service.WebexNotifier{}
-
-		mapper := service.PayloadMapper{}
-		mds := mapper.Apply(payload)
-
-		forEach(mds, func(md util.Markdown) {
-
-			webex := util.Webex{
-				RoomId:   AppConf.Receiver,
-				Markdown: md,
-			}
-
-			notifier.Notify(webex, &AppConf)
-		})
-
-		c.JSON(http.StatusAccepted, gin.H{
-			"msg": "success",
-		})
+		notifier.Notify(webex, &AppConf)
 	})
+
+	c.JSON(http.StatusAccepted, gin.H{
+		"msg": "success",
+	})
+}
+
+func main() {
+	util.ReadConfig(&AppConf)
+	r := gin.Default()
+	r.POST("/notify", handlePOST)
 	r.Run(":2000")
 }
 

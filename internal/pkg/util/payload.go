@@ -6,18 +6,16 @@ type Webex struct {
 }
 
 type Markdown struct {
-	Status      string
-	Alertname   string
-	Cluster     string
-	Namespace   string
-	Guideline   string
-	Caption     string
-	Message     string
-	Occurence   string
-	Severity    string
-	Impact      string
-	Labels      map[string]string
-	Annotations map[string]string
+	Status            string
+	StatusSymbol      string
+	Alertname         string
+	Guideline         string
+	Severity          string
+	AnnotationsString string
+	LabelsString      string
+	Timestamp         string
+	Labels            map[string]string
+	Annotations       map[string]string
 }
 
 type Payload struct {

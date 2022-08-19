@@ -11,14 +11,14 @@ import (
 type TemplateParser struct{}
 
 func (parser TemplateParser) parseError(toBeParsed util.Webex) bytes.Buffer {
-	return parse(toBeParsed, "alert-firing.tpl")
+	return parser.parse(toBeParsed, "alert-firing.tpl")
 }
 
 func (parser TemplateParser) parseResolved(toBeParsed util.Webex) bytes.Buffer {
-	return parse(toBeParsed, "alert-resolved.tpl")
+	return parser.parse(toBeParsed, "alert-resolved.tpl")
 }
 
-func parse(toBeParsed util.Webex, templateFile string) bytes.Buffer {
+func (parser TemplateParser) parse(toBeParsed util.Webex, templateFile string) bytes.Buffer {
 	var parsed bytes.Buffer
 	tpl, err := template.New("webex-template").ParseFiles(templateFile)
 
