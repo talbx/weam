@@ -18,16 +18,17 @@ func (mapper PayloadMapper) Apply(payload util.Payload) []util.Markdown {
 		alert := payload.Alerts[index]
 
 		var md = util.Markdown{
-			Status:    payload.Status,
-			Severity:  alert.Labels["severity"],
-			Alertname: alert.Labels["alertname"],
-			Guideline: alert.Annotations["guideline"],
-			Namespace: alert.Labels["namespace"],
-			Cluster:   alert.Labels["cluster_id"],
-			Impact:    alert.Labels["impact"],
-			Message:   alert.Annotations["message"],
-			Occurence: alert.StartsAt,
-			Labels:    alert.Labels,
+			Status:      payload.Status,
+			Severity:    alert.Labels["severity"],
+			Alertname:   alert.Labels["alertname"],
+			Guideline:   alert.Annotations["guideline"],
+			Namespace:   alert.Labels["namespace"],
+			Cluster:     alert.Labels["cluster_id"],
+			Impact:      alert.Labels["impact"],
+			Message:     alert.Annotations["message"],
+			Occurence:   alert.StartsAt,
+			Annotations: alert.Annotations,
+			Labels:      alert.Labels,
 		}
 		sl = append(sl, md)
 	}
