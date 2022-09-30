@@ -1,18 +1,18 @@
 # weam
 weam (<b>we</b>bex-<b>a</b>lert<b>m</b>anager) is a simple middleware for transportation of prometheus alertmanager alerts into cisco webex.
 
-
 ## Get started
-First, provide a `config.yaml` with webex apiKey and the receiver
+First, provide webex apiKey and the receiver via a secret like
 
-`config.yaml`:
 ```yaml
 ---
-apiKey: <apiKey>
-receiver: <receiverId> # webex room or person id
+API_KEY: <apiKey>
+RECEIVER: <receiverId> # webex room or person id
 ```
 
-and then point your alertmanager to the HTTP endpoint. When using prometheus-operator CRDs it can look like this:
+You then need to mount the the secret as env vars into your weam container, so that `os.Getenv(...)` can resolve them.
+
+Point your alertmanager to the HTTP endpoint. When using prometheus-operator CRDs it can look like this:
 
 `alertmanagerConfig.yaml`:
 ```yaml
@@ -41,4 +41,4 @@ spec:
         receiver: webex
 ```
 
-the middleware exposes the HTTP-POST endpoint on `:2000/notify`
+the middleware exposes the HTTP-POST endpoint on `:2000/notify`.
