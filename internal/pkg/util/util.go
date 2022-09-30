@@ -2,9 +2,7 @@ package util
 
 import (
 	"fmt"
-	"io/ioutil"
-
-	"gopkg.in/yaml.v2"
+	"os"
 )
 
 type AppConfig struct {
@@ -15,17 +13,8 @@ type AppConfig struct {
 var AppConf AppConfig
 
 func ReadConfig(config *AppConfig) {
-	filename := "config.yaml"
-	buf, err := ioutil.ReadFile(filename)
-	if err != nil {
-		panic(err)
-	}
-
-	err = yaml.Unmarshal(buf, config)
-	AppConf = *config
-	if err != nil {
-		panic(err)
-	}
+	config.ApiKey = os.Getenv("API_KEY")
+	config.Receiver = os.Getenv("RECEIVER")
 }
 
 func MapToString(m map[string]string) string {
